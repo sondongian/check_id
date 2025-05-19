@@ -25,4 +25,12 @@ module.exports = async function handler(req, res) {
   const username = body.get("username");
   const password = body.get("password");
 
-  const ok = admins.some(admin => admin.username === userna
+  const ok = admins.some(admin => admin.username === username && admin.password === password);
+
+  if (ok) {
+    res.setHeader("Set-Cookie", `admin=${username}; Path=/; HttpOnly`);
+    return res.writeHead(302, { Location: "/admin" }).end();
+  }
+
+  return res.end("Đăng nhập sai. <a href='/login'>Thử lại</a>");
+};
